@@ -18,7 +18,7 @@ const kMessageContainerDecoration = BoxDecoration(
   ),
 );
 
-const kTextDecoration = InputDecoration(
+const kTextFieldDecoration = InputDecoration(
   hintText: 'Enter your email',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   border: OutlineInputBorder(
@@ -33,5 +33,3 @@ const kTextDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );
-
-// TODO: continuar refatorando o DECORATION. cuidado com o hintText que é diferente em cada um!
