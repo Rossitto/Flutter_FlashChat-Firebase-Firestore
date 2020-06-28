@@ -74,10 +74,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FlatButton(
                     onPressed: () {
+                      _firestore.collection('messages').add({
+                        'text': message,
+                        'sender': loggedInUser.email,
+                        'timestamp': Timestamp.now(),
+                      });
                       messageTextController.clear();
-                      _firestore
-                          .collection('messages')
-                          .add({'text': message, 'sender': loggedInUser.email});
                     },
                     child: Text(
                       'Send',
@@ -99,7 +101,11 @@ class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('messages').snapshots(),
+      // stream: _firestore.collection('messages').snapshots(),
+      stream: _firestore
+          .collection('messages')
+          .orderBy('timestamp', descending: false)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -120,6 +126,7 @@ class MessagesStream extends StatelessWidget {
             sender: messageSender,
             text: messageText,
             isMe: currentUser == messageSender,
+            timestamp: Timestamp.now(),
           );
           messageBubbles.add(messageBubble);
         }
@@ -144,8 +151,9 @@ class MessageBubble extends StatelessWidget {
   final String text;
   final String sender;
   final bool isMe;
+  final Timestamp timestamp;
 
-  MessageBubble({this.sender, this.text, this.isMe});
+  MessageBubble({this.sender, this.text, this.isMe, this.timestamp});
 
   @override
   Widget build(BuildContext context) {
